@@ -1,0 +1,43 @@
+---
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: creating iam user and add them to the exsited group
+
+
+Parameters:
+  TestGroup:
+    Type: String
+    Default: CloudOps
+    Description: 共通のグループ
+  Password:
+    Type: String
+    Default: password
+    Description: パスワードを設定してください
+
+
+Resources:
+
+## IAM group 追加
+  SharedGroup:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName: !Ref TestGroup
+      Users:
+        - !Ref testuser
+
+
+
+## IAM user 作成
+  testuser:
+    Type: AWS::IAM::User
+    Properties:
+      Path: /
+      Groups:
+        - !Ref TestGroup
+      LoginProfile:
+        Password: !Ref Password
+        PasswordResetRequired: true
+      UserName:  kentaindeedtest
+
+
+
